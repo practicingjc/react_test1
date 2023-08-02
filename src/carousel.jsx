@@ -1,23 +1,38 @@
-import { useRef, useState, forwardRef, useLayoutEffect,useEffect } from "react";
+import {
+  useRef,
+  useState,
+  forwardRef,
+  useLayoutEffect,
+  useEffect,
+} from "react";
 
 export default function Carousel({ books }) {
   const [imgs, setImgs] = useState(null);
   const [imgsWidth, setImgsWidth] = useState(0);
   const imgsArray = useRef(null);
+  console.log(books);
+
   useLayoutEffect(() => {
-    let arr = books.map((book) => {
-      return <img className="imgs" key={book.id} src={book.download_url}></img>;
-    });
-    setImgs(arr);
     setImgsWidth(imgsArray.current.scrollWidth);
   }, []);
+
   return (
     <div className="container">
-      <div className="topInfo"><p>{imgsWidth}</p></div>
+      <div className="topInfo">
+        <p>{imgsWidth}</p>
+      </div>
       <Scroll />
       <div className="imgsLocation">
-        <div ref={imgsArray} className="imgsData">
-          {imgs}
+        <div
+          ref={imgsArray}
+          className="imgsData"
+          onLoad={() => {
+            if (imgsArray.current != null) {
+              setImgsWidth(imgsArray.current.scrollWidth);
+            }
+          }}
+        >
+          {books}
         </div>
       </div>
     </div>
